@@ -4,6 +4,7 @@ const theme = {
       rose: '#FDBAA3',
       white: '#FFFFFF',
       midnight: '#3C3D43',
+      creamWhite: '#FFFDFA',
     },
     semantic: {
       red: '#F7685C',
@@ -15,6 +16,13 @@ const theme = {
       lilac: 'rgba(182, 165, 203, 0.4)',
       greenCyan: 'rgba( 151, 210, 188, 0.6)',
       lightCyan: 'rgba(174, 223, 232, 0.6)',
+    },
+    grays: {
+      gray900: '#000000',
+      gray800: '#343539',
+      gray600: '#4D4D4D',
+      gray400: '#808080',
+      gray300: '#8C8A97',
     },
   },
   font: 'Ubuntu, sans-serif',
