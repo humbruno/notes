@@ -1,10 +1,10 @@
-import GoogleIcon from 'images/SVG/GoogleIcon';
+import LoginIcon from 'images/SVG/LoginIcon';
 import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';
 
 const StyledButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.semantic.red};
+  background-color: ${({ theme }) => theme.colors.semantic.green};
   color: ${({ theme }) => theme.colors.primary.white};
   border: none;
 
@@ -28,13 +28,13 @@ const StyledButton = styled.button`
   }
 `;
 
-const GoogleLoginButton = () => {
+const AnonymousLoginButton = () => {
   return (
     <StyledButton>
-      <GoogleIcon />
-      Join with Google
+      <LoginIcon />
+      Join anonymously
     </StyledButton>
   );
 };
 
-export default GoogleLoginButton;
+export default AnonymousLoginButton;

@@ -25,7 +25,6 @@ const theme = {
       gray300: '#8C8A97',
     },
   },
-  font: 'Ubuntu, sans-serif',
   fontWeights: {
     regular: 400,
     medium: 500,

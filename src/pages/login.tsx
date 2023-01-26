@@ -7,6 +7,7 @@ import { rem } from 'polished';
 import manWorking from 'images/man-computer.png';
 import logoDark from 'images/logo-dark.png';
 import GoogleLoginButton from 'components/GoogleLoginButton';
+import AnonymousLogin from 'components/AnonymousLogin';
 
 const Main = styled.main`
   min-height: 100vh;
@@ -81,11 +82,7 @@ const Login = () => {
             style={{ userSelect: 'none', marginBottom: '46px' }}
           />
           <GoogleLoginButton />
-          <small>or join anonymously</small>
-          <form action="">
-            <input type="text" name="" id="" />
-            <button>Join anonymously</button>
-          </form>
+          <AnonymousLogin />
         </LoginForm>
       </Main>
     </>
