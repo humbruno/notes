@@ -9,7 +9,6 @@ const Divider = styled.small`
   line-height: ${rem(16)};
   color: ${({ theme }) => theme.colors.grays.gray300};
   position: relative;
-  width: 100%;
   text-align: center;
   margin-top: 46px;
 
@@ -17,22 +16,10 @@ const Divider = styled.small`
     content: '';
     display: block;
     position: absolute;
+    top: 50%;
     left: 0;
-    top: 50%;
-    height: 1px;
-    width: 76px;
-    background-color: ${({ theme }) => theme.colors.grays.gray300};
-  }
-
-  &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 100%;
-    transform: translateX(-100%);
-    top: 50%;
-    height: 1px;
-    width: 76px;
+    height: 2px;
+    width: 100%;
     background-color: ${({ theme }) => theme.colors.grays.gray300};
   }
 `;
@@ -66,9 +53,10 @@ const AnonymousLogin = () => {
       <LoginForm action="">
         <NameInput
           type="text"
-          name=""
-          id=""
+          name="username"
+          id="username"
           placeholder="Type your secret codename"
+          required
         />
         <AnonymousLoginButton />
       </LoginForm>

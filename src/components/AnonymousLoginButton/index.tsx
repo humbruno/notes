@@ -24,7 +24,7 @@ const StyledButton = styled.button`
 
   &:hover {
     cursor: pointer;
-    filter: brightness(1.1);
+    filter: brightness(1.05);
   }
 `;
 
