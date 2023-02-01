@@ -8,6 +8,7 @@ import manWorking from 'images/man-computer.png';
 import logoDark from 'images/logo-dark.png';
 import GoogleLoginButton from 'components/GoogleLoginButton';
 import AnonymousLogin from 'components/AnonymousLogin';
+import { getSession, GetSessionParams } from 'next-auth/react';
 
 const Main = styled.main`
   min-height: 100vh;
@@ -53,6 +54,23 @@ const LoginForm = styled.section`
   display: flex;
   flex-direction: column;
 `;
+
+export const getServerSideProps = async (ctx: GetSessionParams) => {
+  const session = await getSession(ctx);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
 
 const Login = () => {
   return (
