@@ -18,9 +18,23 @@ const Divider = styled.small`
     position: absolute;
     top: 50%;
     left: 0;
-    height: 2px;
+    height: 1px;
     width: 100%;
     background-color: ${({ theme }) => theme.colors.grays.gray300};
+  }
+
+  &::after {
+    content: 'or join anonymously';
+    color: ${({ theme }) => theme.colors.grays.gray300};
+    background-color: ${({ theme }) => theme.colors.primary.creamWhite};
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: calc(50% - 25px);
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2px;
   }
 `;
 
