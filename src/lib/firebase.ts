@@ -41,6 +41,7 @@ const signInWithGoogle = async () => {
         name: user.displayName,
         authProvider: 'google',
         email: user.email,
+        notes: [],
       });
     }
   } catch (e) {

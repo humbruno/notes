@@ -1,5 +1,5 @@
 import SEO from 'components/SEO';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { rem } from 'polished';
@@ -10,6 +10,8 @@ import GoogleLoginButton from 'components/GoogleLoginButton';
 import AnonymousLogin from 'components/AnonymousLogin';
 import { auth } from 'lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import LoadingDots from 'components/LoadingDots';
 
 const Main = styled.main`
   min-height: 100vh;
@@ -56,24 +58,16 @@ const LoginForm = styled.section`
   flex-direction: column;
 `;
 
-// export const getServerSideProps = async (ctx) => {
-//   const [user, loading, error] = useAuthState(auth);
-
-//   if (user) {
-//     return {
-//       redirect: {
-//         destination: '/',
-//         permanent: false,
-//       },
-//     };
-//   }
-
-//   return {
-//     props: {},
-//   };
-// };
-
 const Login = () => {
+  const [user, loading, error] = useAuthState(auth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) router.push('/');
+  }, [user]);
+
+  if (user || loading) return <LoadingDots />;
+
   return (
     <>
       <SEO
