@@ -1,5 +1,5 @@
 import { rem } from 'polished';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import AnonymousLoginButton from 'components/AnonymousLoginButton';
 
@@ -61,18 +61,44 @@ const NameInput = styled.input`
 `;
 
 const AnonymousLogin = () => {
+  const [login, setLogin] = useState('initial');
+  const anonLoginRef = useRef(null);
+
+  const handleAnonymousLoginFormSubmit = (e) => {
+    e.preventDefault();
+
+    sessionStorage.setItem(
+      'anonymousLogin',
+      JSON.stringify(anonLoginRef.current.value),
+    );
+    setLogin(anonLoginRef.current.value);
+  };
+
+  useEffect(() => {
+    const test = sessionStorage.getItem('anonymousLogin');
+
+    if (test) {
+      const data = JSON.parse(test);
+      setLogin(data);
+    } else {
+      setLogin('initial');
+    }
+  }, []);
+
   return (
     <>
       <Divider>or join anonymously</Divider>
-      <LoginForm action="">
+      <LoginForm onSubmit={handleAnonymousLoginFormSubmit}>
         <NameInput
           type="text"
           name="username"
           id="username"
           placeholder="Type your secret codename"
           required
+          ref={anonLoginRef}
         />
         <AnonymousLoginButton />
+        <p>{login}</p>
       </LoginForm>
     </>
   );
