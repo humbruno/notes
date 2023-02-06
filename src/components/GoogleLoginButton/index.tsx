@@ -2,7 +2,7 @@ import GoogleIcon from 'images/SVG/GoogleIcon';
 import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';
-import { signIn, useSession } from 'next-auth/react';
+import { signInWithGoogle } from 'lib/firebase';
 
 const StyledButton = styled.button`
   background-color: ${({ theme }) => theme.colors.semantic.red};
@@ -31,7 +31,7 @@ const StyledButton = styled.button`
 
 const GoogleLoginButton = () => {
   return (
-    <StyledButton onClick={() => signIn('google')}>
+    <StyledButton onClick={signInWithGoogle}>
       <GoogleIcon />
       Join with Google
     </StyledButton>

@@ -1,37 +1,35 @@
 import type { NextPage } from 'next';
-import {
-  getSession,
-  GetSessionParams,
-  signOut,
-  useSession,
-} from 'next-auth/react';
+import { auth, logout } from 'lib/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-export const getServerSideProps = async (ctx: GetSessionParams) => {
-  const session = await getSession(ctx);
+// export const getServerSideProps = async () => {
+//   const [user, loading, error] = useAuthState(auth);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+//   if (!user) {
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return {
-    props: {
-      session,
-    },
-  };
-};
+//   return {
+//     props: {
+//       user,
+//     },
+//   };
+// };
 
 const Home: NextPage = () => {
-  const { data: session } = useSession();
+  const [user, loading, error] = useAuthState(auth);
+
+  console.log(user);
 
   return (
     <div>
-      <p>Logged in! Welcome, {session?.user?.name}</p>
-      <button onClick={() => signOut()}>Sign out</button>
+      <p>Logged in! Welcome, {user?.displayName}</p>
+      <button onClick={logout}>Sign out</button>
     </div>
   );
 };
