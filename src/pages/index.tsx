@@ -50,7 +50,7 @@ const Home: NextPage = () => {
     };
   }, [user]);
 
-  const handleLogoutButon = () => {
+  const handleLogout = () => {
     if (user) return logout();
 
     localStorage.removeItem('anonymousLogin');
@@ -67,10 +67,9 @@ const Home: NextPage = () => {
         tabName="Dashboard"
         title="NOTE.me"
       />
-      <Sidebar />
+      <Sidebar onLogout={handleLogout} />
       <ContentContainer>
-        <p>Logged in! Welcome, {user?.displayName || JSON.parse(anonLogin)}</p>
-        <button onClick={handleLogoutButon}>Sign out</button>
+        <p>Hello, {user?.displayName || JSON.parse(anonLogin)}! &#x1F44B;</p>
         <ul>
           {notes.length !== 0 &&
             notes.map((note) => (

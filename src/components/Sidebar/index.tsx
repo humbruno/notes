@@ -31,18 +31,28 @@ const SidebarButton = styled.button`
 
   &:hover {
     cursor: pointer;
-    transform: scale(1.1);
+    transform: scale(1.2);
+
+    svg {
+      g {
+        stroke: ${({ theme }) => theme.colors.semantic.red};
+      }
+    }
   }
 `;
 
-const Sidebar = () => {
+interface SidebarProps {
+  onLogout: any;
+}
+
+const Sidebar = ({ onLogout }: SidebarProps) => {
   return (
     <Container>
       <Image src={logoSimpleDark} alt="" />
       <SidebarButton title="New Note">
         <PlusIcon />
       </SidebarButton>
-      <SidebarButton title="Logout">
+      <SidebarButton title="Logout" onClick={onLogout}>
         <LogoutIcon />
       </SidebarButton>
     </Container>
