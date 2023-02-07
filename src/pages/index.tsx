@@ -5,15 +5,22 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import LoadingDots from 'components/LoadingDots';
 import getUserProfileNotes from 'components/services/getUserProfileNotes';
+import SEO from 'components/SEO';
+
+let anonLogin;
 
 const Home: NextPage = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
 
+  if (typeof window !== 'undefined') {
+    anonLogin = localStorage.getItem('anonymousLogin');
+  }
+
   useEffect(() => {
-    if (!user) router.push('/login');
-  }, [user]);
+    if (!user && !anonLogin) router.push('/login');
+  }, [user, anonLogin]);
 
   useEffect(() => {
     let isMounted = true;
@@ -31,22 +38,37 @@ const Home: NextPage = () => {
     };
   }, [user]);
 
-  if (loading) return <LoadingDots />;
+  const handleLogoutButon = () => {
+    if (user) return logout();
+
+    localStorage.removeItem('anonymousLogin');
+
+    router.push('/');
+  };
+
+  if ((!user && !anonLogin) || loading) return <LoadingDots />;
 
   return (
-    <div>
-      <p>Logged in! Welcome, {user?.displayName}</p>
-      <button onClick={logout}>Sign out</button>
-      <ul>
-        {notes.length !== 0 &&
-          notes.map((note) => (
-            <li key={note.uid}>
-              <p>{note.content}</p>
-              <p>{note.lastUpdated}</p>
-            </li>
-          ))}
-      </ul>
-    </div>
+    <>
+      <SEO
+        description="Keep your notes readily at hand!"
+        tabName="Dashboard"
+        title="NOTE.me"
+      />
+      <div>
+        <p>Logged in! Welcome, {user?.displayName || JSON.parse(anonLogin)}</p>
+        <button onClick={handleLogoutButon}>Sign out</button>
+        <ul>
+          {notes.length !== 0 &&
+            notes.map((note) => (
+              <li key={note.uid}>
+                <p>{note.content}</p>
+                <p>{note.lastUpdated}</p>
+              </li>
+            ))}
+        </ul>
+      </div>
+    </>
   );
 };
 

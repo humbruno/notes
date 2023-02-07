@@ -1,7 +1,9 @@
 import { rem } from 'polished';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import AnonymousLoginButton from 'components/AnonymousLoginButton';
+import { useRouter } from 'next/router';
+import { breakpoints } from 'styles/theme';
 
 const Divider = styled.small`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
@@ -12,29 +14,8 @@ const Divider = styled.small`
   text-align: center;
   margin-top: 46px;
 
-  &::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    height: 1px;
-    width: 100%;
-    background-color: ${({ theme }) => theme.colors.grays.gray300};
-  }
-
-  &::after {
-    content: 'or join anonymously';
-    color: ${({ theme }) => theme.colors.grays.gray300};
-    background-color: ${({ theme }) => theme.colors.primary.creamWhite};
-    padding: 25px;
-    display: flex;
-    align-items: center;
-    position: absolute;
-    top: calc(50% - 25px);
-    left: 50%;
-    transform: translateX(-50%);
-    height: 2px;
+  @media (max-width: ${breakpoints.laptop}) {
+    margin-top: 20px;
   }
 `;
 
@@ -43,6 +24,11 @@ const LoginForm = styled.form`
   flex-direction: column;
   margin-top: 35px;
   gap: 30px;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    margin-top: 20px;
+    width: 100%;
+  }
 `;
 
 const NameInput = styled.input`
@@ -58,32 +44,29 @@ const NameInput = styled.input`
     outline: none;
     border: 1px solid ${({ theme }) => theme.colors.semantic.green};
   }
+
+  @media (max-width: ${breakpoints.laptop}) {
+    font-size: ${rem(14)};
+  }
 `;
 
 const AnonymousLogin = () => {
-  const [login, setLogin] = useState('initial');
+  const router = useRouter();
+
   const anonLoginRef = useRef(null);
 
-  const handleAnonymousLoginFormSubmit = (e) => {
+  const handleAnonymousLoginFormSubmit = (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
 
-    sessionStorage.setItem(
+    localStorage.setItem(
       'anonymousLogin',
       JSON.stringify(anonLoginRef.current.value),
     );
-    setLogin(anonLoginRef.current.value);
+
+    router.push('/');
   };
-
-  useEffect(() => {
-    const test = sessionStorage.getItem('anonymousLogin');
-
-    if (test) {
-      const data = JSON.parse(test);
-      setLogin(data);
-    } else {
-      setLogin('initial');
-    }
-  }, []);
 
   return (
     <>
@@ -94,11 +77,11 @@ const AnonymousLogin = () => {
           name="username"
           id="username"
           placeholder="Type your secret codename"
+          maxLength={20}
           required
           ref={anonLoginRef}
         />
         <AnonymousLoginButton />
-        <p>{login}</p>
       </LoginForm>
     </>
   );
