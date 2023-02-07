@@ -6,8 +6,20 @@ import { useRouter } from 'next/router';
 import LoadingDots from 'components/LoadingDots';
 import getUserProfileNotes from 'components/services/getUserProfileNotes';
 import SEO from 'components/SEO';
+import Sidebar from 'components/Sidebar';
+import styled from 'styled-components';
 
 let anonLogin;
+
+const Container = styled.main`
+  display: flex;
+`;
+
+const ContentContainer = styled.section`
+  width: 100%;
+  padding: 40px 112px 0 112px;
+  background-color: #fdfdfd;
+`;
 
 const Home: NextPage = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -49,13 +61,14 @@ const Home: NextPage = () => {
   if ((!user && !anonLogin) || loading) return <LoadingDots />;
 
   return (
-    <>
+    <Container>
       <SEO
         description="Keep your notes readily at hand!"
         tabName="Dashboard"
         title="NOTE.me"
       />
-      <div>
+      <Sidebar />
+      <ContentContainer>
         <p>Logged in! Welcome, {user?.displayName || JSON.parse(anonLogin)}</p>
         <button onClick={handleLogoutButon}>Sign out</button>
         <ul>
@@ -67,8 +80,8 @@ const Home: NextPage = () => {
               </li>
             ))}
         </ul>
-      </div>
-    </>
+      </ContentContainer>
+    </Container>
   );
 };
 
