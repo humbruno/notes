@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { auth, db, logout } from 'lib/firebase';
+import { auth, logout } from 'lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
