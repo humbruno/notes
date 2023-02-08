@@ -4,10 +4,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import LoadingDots from 'components/LoadingDots';
-import getUserProfileNotes from 'components/services/getUserProfileNotes';
+import getUserProfileNotes from 'utils/getUserProfileNotes';
 import SEO from 'components/SEO';
 import Sidebar from 'components/Sidebar';
 import styled from 'styled-components';
+import Greeting from 'components/Greeting';
+import Note from 'components/Note';
 
 let anonLogin;
 
@@ -19,6 +21,14 @@ const ContentContainer = styled.section`
   width: 100%;
   padding: 40px 112px 0 112px;
   background-color: #fdfdfd;
+`;
+
+const NotesContainer = styled.ul`
+  list-style: none;
+  display: flex;
+  gap: 36px;
+  flex-wrap: wrap;
+  margin-top: 63px;
 `;
 
 const Home: NextPage = () => {
@@ -69,16 +79,15 @@ const Home: NextPage = () => {
       />
       <Sidebar onLogout={handleLogout} />
       <ContentContainer>
-        <p>Hello, {user?.displayName || JSON.parse(anonLogin)}! &#x1F44B;</p>
-        <ul>
+        <Greeting name={user?.displayName || JSON.parse(anonLogin)} />
+        <NotesContainer>
           {notes.length !== 0 &&
             notes.map((note) => (
               <li key={note.uid}>
-                <p>{note.content}</p>
-                <p>{note.lastUpdated}</p>
+                <Note content={note.content} date={note.lastUpdated} />
               </li>
             ))}
-        </ul>
+        </NotesContainer>
       </ContentContainer>
     </Container>
   );
