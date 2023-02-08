@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './LoadingDots.module.css';
 import styled from 'styled-components';
 
 const FullPageContainer = styled.div`
@@ -44,9 +43,9 @@ const LoadingDots = () => {
   return (
     <FullPageContainer>
       <DotsContainer>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div />
+        <div />
+        <div />
       </DotsContainer>
     </FullPageContainer>
   );

@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import Greeting from 'components/Greeting';
 import Note from 'components/Note';
 
-let anonLogin;
+let anonLogin: string;
 
 const Container = styled.main`
   display: flex;
@@ -32,7 +32,7 @@ const NotesContainer = styled.ul`
 `;
 
 const Home: NextPage = () => {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<Note[]>();
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
 
@@ -58,7 +58,7 @@ const Home: NextPage = () => {
     return () => {
       isMounted = false;
     };
-  }, [user]);
+  }, []);
 
   const handleLogout = () => {
     if (user) return logout();
@@ -71,25 +71,27 @@ const Home: NextPage = () => {
   if ((!user && !anonLogin) || loading) return <LoadingDots />;
 
   return (
-    <Container>
+    <>
       <SEO
         description="Keep your notes readily at hand!"
         tabName="Dashboard"
         title="NOTE.me"
       />
-      <Sidebar onLogout={handleLogout} />
-      <ContentContainer>
-        <Greeting name={user?.displayName || JSON.parse(anonLogin)} />
-        <NotesContainer>
-          {notes.length !== 0 &&
-            notes.map((note) => (
-              <li key={note.uid}>
-                <Note content={note.content} date={note.lastUpdated} />
-              </li>
-            ))}
-        </NotesContainer>
-      </ContentContainer>
-    </Container>
+      <Container>
+        <Sidebar onLogout={handleLogout} />
+        <ContentContainer>
+          <Greeting name={user?.displayName || JSON.parse(anonLogin)} />
+          <NotesContainer>
+            {notes &&
+              notes.map((note) => (
+                <li key={note.uid}>
+                  <Note content={note.content} date={note.lastUpdated} />
+                </li>
+              ))}
+          </NotesContainer>
+        </ContentContainer>
+      </Container>
+    </>
   );
 };
 
