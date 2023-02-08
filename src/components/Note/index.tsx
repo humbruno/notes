@@ -1,3 +1,4 @@
+import TrashIcon from 'images/SVG/TrashIcon';
 import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';
@@ -40,6 +41,29 @@ const NoteContent = styled.p`
   }
 `;
 
+const Footnote = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const DeleteNoteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+
+    svg {
+      g {
+        stroke: ${({ theme }) => theme.colors.semantic.red};
+      }
+    }
+  }
+`;
+
 const Date = styled.small`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   font-size: ${rem(14)};
@@ -50,13 +74,20 @@ const Date = styled.small`
 interface NoteProps {
   content: string;
   date: string;
+  uid: string;
+  onDeleteNote: (id: string) => void;
 }
 
-const Note = ({ content, date }: NoteProps) => {
+const Note = ({ uid, content, date, onDeleteNote }: NoteProps) => {
   return (
     <Container>
       <NoteContent>{content}</NoteContent>
-      <Date>{date}</Date>
+      <Footnote>
+        <Date>{date}</Date>
+        <DeleteNoteButton onClick={() => onDeleteNote(uid)} title="Delete Note">
+          <TrashIcon />
+        </DeleteNoteButton>
+      </Footnote>
     </Container>
   );
 };

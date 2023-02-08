@@ -1,7 +1,8 @@
+import { User } from 'firebase/auth';
 import { query, getDocs, collection, where } from 'firebase/firestore';
 import { db } from 'lib/firebase';
 
-const getUserProfileNotes = async (user) => {
+const getUserProfileNotes = async (user: User) => {
   let userNotes = [];
 
   const q = query(collection(db, 'users'), where('uid', '==', user.uid));

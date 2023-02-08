@@ -10,6 +10,7 @@ import Sidebar from 'components/Sidebar';
 import styled from 'styled-components';
 import Greeting from 'components/Greeting';
 import Note from 'components/Note';
+import deleteNoteFromUserProfile from 'utils/deleteNoteFromUserProfile';
 
 let anonLogin: string;
 
@@ -68,6 +69,10 @@ const Home: NextPage = () => {
     router.push('/');
   };
 
+  const handleDeleteNote = (uid: string) => {
+    deleteNoteFromUserProfile({ user: user, noteUid: uid });
+  };
+
   if ((!user && !anonLogin) || loading) return <LoadingDots />;
 
   return (
@@ -85,7 +90,12 @@ const Home: NextPage = () => {
             {notes &&
               notes.map((note) => (
                 <li key={note.uid}>
-                  <Note content={note.content} date={note.lastUpdated} />
+                  <Note
+                    content={note.content}
+                    date={note.lastUpdated}
+                    uid={note.uid}
+                    onDeleteNote={handleDeleteNote}
+                  />
                 </li>
               ))}
           </NotesContainer>
