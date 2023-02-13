@@ -52,7 +52,7 @@ const Sidebar = ({ onLogout }: SidebarProps) => {
       <SidebarButton title="New Note">
         <PlusIcon />
       </SidebarButton>
-      <SidebarButton title="Logout" onClick={onLogout}>
+      <SidebarButton title="Log Out" onClick={onLogout}>
         <LogoutIcon />
       </SidebarButton>
     </Container>

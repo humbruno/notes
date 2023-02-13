@@ -2,9 +2,9 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import { User } from 'firebase/auth';
 import TrashIcon from 'images/SVG/TrashIcon';
 import { rem } from 'polished';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import getCurrentDateFormat from 'utils/getCurrentDateFormat';
 import updateNoteOnUserProfile from 'utils/updateNoteOnUserProfile';
 
 const Container = styled.div`
@@ -87,12 +87,21 @@ interface NoteProps {
   user: User;
   date: string;
   uid: string;
-  onDeleteNote: (id: string) => void;
+  handleDeleteNote: (id: string) => void;
+  handleErrorNotification: (errorMessage: string) => void;
 }
 
-const Note = ({ uid, user, content, date, onDeleteNote }: NoteProps) => {
+const Note = ({
+  uid,
+  user,
+  content,
+  date,
+  handleDeleteNote,
+  handleErrorNotification,
+}: NoteProps) => {
   const [timer, setTimer] = useState<NodeJS.Timeout>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [lastUpdatedDate, setLastUpdateDate] = useState<string>(date);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     clearTimeout(timer);
@@ -102,12 +111,14 @@ const Note = ({ uid, user, content, date, onDeleteNote }: NoteProps) => {
         setIsSubmitting(true);
 
         await updateNoteOnUserProfile({
-          user: user,
+          user,
           noteUid: uid,
           newNoteContent: e.target.value,
         });
-      } catch (error) {
-        console.log(error);
+
+        setLastUpdateDate(getCurrentDateFormat());
+        handleErrorNotification('Something went wrong.');
+      } catch {
       } finally {
         setIsSubmitting(false);
       }
@@ -125,12 +136,12 @@ const Note = ({ uid, user, content, date, onDeleteNote }: NoteProps) => {
         rows={5}
       />
       <Footnote>
-        <Date>{date}</Date>
+        <Date title="Last Updated">{lastUpdatedDate}</Date>
         {isSubmitting ? (
           <LoadingSpinner />
         ) : (
           <DeleteNoteButton
-            onClick={() => onDeleteNote(uid)}
+            onClick={() => handleDeleteNote(uid)}
             title="Delete Note"
           >
             <TrashIcon />

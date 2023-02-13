@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { auth, logout } from 'lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import LoadingDots from 'components/LoadingDots';
 import getUserProfileNotes from 'utils/getUserProfileNotes';
@@ -34,8 +34,14 @@ const NotesContainer = styled.ul`
   margin-top: 63px;
 `;
 
+const handleErrorNotification = (errorMessage: string) => {
+  toast.error(errorMessage);
+};
+
 const Home: NextPage = () => {
   const [notes, setNotes] = useState<Note[]>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
 
@@ -63,32 +69,35 @@ const Home: NextPage = () => {
     };
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     if (user) return logout();
 
     localStorage.removeItem('anonymousLogin');
 
     router.push('/');
-  };
+  }, [user]);
 
-  const handleDeleteNote = (uid: string) => {
-    deleteNoteFromUserProfile({ user: user, noteUid: uid });
-  };
+  const handleDeleteNote = useCallback(
+    async (uid: string) => {
+      try {
+        setIsLoading(true);
 
-  useEffect(() => {
-    toast.error('🦄 Wow so easy!', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'light',
-    });
-  }, []);
+        await deleteNoteFromUserProfile({ user: user, noteUid: uid });
 
-  if ((!user && !anonLogin) || loading) return <LoadingDots />;
+        const res = await getUserProfileNotes(user);
+        setNotes(res);
+
+        toast.success('Note deleted successfully.');
+      } catch {
+        handleErrorNotification('Something went wrong.');
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [user],
+  );
+
+  if ((!user && !anonLogin) || loading || isLoading) return <LoadingDots />;
 
   return (
     <>
@@ -107,11 +116,12 @@ const Home: NextPage = () => {
               notes.map((note) => (
                 <li key={note.uid}>
                   <Note
+                    user={user}
                     content={note.content}
                     date={note.lastUpdated}
                     uid={note.uid}
-                    onDeleteNote={handleDeleteNote}
-                    user={user}
+                    handleDeleteNote={handleDeleteNote}
+                    handleErrorNotification={handleErrorNotification}
                   />
                 </li>
               ))}
