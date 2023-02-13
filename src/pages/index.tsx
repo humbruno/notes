@@ -13,6 +13,16 @@ import Note from 'components/Note';
 import deleteNoteFromUserProfile from 'utils/deleteNoteFromUserProfile';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { DEFAULT_NOTES } from 'constants/index';
+import theme from 'styles/theme';
+
+const bgColors = [
+  theme.colors.post.greenCyan,
+  theme.colors.post.lightCyan,
+  theme.colors.post.lightYellow,
+  theme.colors.post.lilac,
+  theme.colors.post.redOrange,
+];
 
 let anonLogin: string;
 
@@ -42,7 +52,7 @@ const Home: NextPage = () => {
   const [notes, setNotes] = useState<Note[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const router = useRouter();
 
   if (typeof window !== 'undefined') {
@@ -60,8 +70,8 @@ const Home: NextPage = () => {
       if (user && isMounted) {
         getUserProfileNotes(user).then((res) => setNotes(res));
       }
-    } catch (e) {
-      console.log(e);
+    } catch {
+      handleErrorNotification('Something went wrong.');
     }
 
     return () => {
@@ -97,6 +107,12 @@ const Home: NextPage = () => {
     [user],
   );
 
+  const handleAddNewNote = () => {
+    const newNotes = [...notes, DEFAULT_NOTES[0]];
+
+    setNotes(newNotes);
+  };
+
   if ((!user && !anonLogin) || loading || isLoading) return <LoadingDots />;
 
   return (
@@ -107,15 +123,16 @@ const Home: NextPage = () => {
         title="NOTE.me"
       />
       <Container>
-        <Sidebar onLogout={handleLogout} />
+        <Sidebar onAddNewNote={handleAddNewNote} onLogout={handleLogout} />
         <ContentContainer>
           <Greeting name={user?.displayName || JSON.parse(anonLogin)} />
           <ToastContainer />
           <NotesContainer>
             {notes &&
-              notes.map((note) => (
+              notes.map((note, idx) => (
                 <li key={note.uid}>
                   <Note
+                    bgColor={bgColors[idx % bgColors.length]}
                     user={user}
                     content={note.content}
                     date={note.lastUpdated}

@@ -42,14 +42,15 @@ const SidebarButton = styled.button`
 `;
 
 interface SidebarProps {
-  onLogout: any;
+  onLogout: () => void;
+  onAddNewNote: () => void;
 }
 
-const Sidebar = ({ onLogout }: SidebarProps) => {
+const Sidebar = ({ onLogout, onAddNewNote }: SidebarProps) => {
   return (
     <Container>
       <Image src={logoSimpleDark} alt="" />
-      <SidebarButton title="New Note">
+      <SidebarButton title="New Note" onClick={onAddNewNote}>
         <PlusIcon />
       </SidebarButton>
       <SidebarButton title="Log Out" onClick={onLogout}>

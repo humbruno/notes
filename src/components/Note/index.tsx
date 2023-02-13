@@ -9,7 +9,7 @@ import updateNoteOnUserProfile from 'utils/updateNoteOnUserProfile';
 
 const Container = styled.div`
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.colors.post.greenCyan};
+  //background-color: ${({ theme }) => theme.colors.post.greenCyan};
   padding: 24px;
   max-width: 264px;
   height: 240px;
@@ -87,6 +87,7 @@ interface NoteProps {
   user: User;
   date: string;
   uid: string;
+  bgColor: string;
   handleDeleteNote: (id: string) => void;
   handleErrorNotification: (errorMessage: string) => void;
 }
@@ -96,6 +97,7 @@ const Note = ({
   user,
   content,
   date,
+  bgColor,
   handleDeleteNote,
   handleErrorNotification,
 }: NoteProps) => {
@@ -117,8 +119,8 @@ const Note = ({
         });
 
         setLastUpdateDate(getCurrentDateFormat());
-        handleErrorNotification('Something went wrong.');
       } catch {
+        handleErrorNotification('Something went wrong.');
       } finally {
         setIsSubmitting(false);
       }
@@ -128,7 +130,7 @@ const Note = ({
   };
 
   return (
-    <Container>
+    <Container style={{ backgroundColor: bgColor }}>
       <NoteContent
         autoComplete="off"
         defaultValue={content}
