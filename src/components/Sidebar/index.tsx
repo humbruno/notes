@@ -17,7 +17,7 @@ const Container = styled.nav`
   align-items: center;
   padding: 30px 40px;
 
-  position: relative;
+  position: fixed;
   z-index: 1;
 
   box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.05);

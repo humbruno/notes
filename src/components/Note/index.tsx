@@ -7,9 +7,9 @@ import styled from 'styled-components';
 import getCurrentDateFormat from 'utils/getCurrentDateFormat';
 import updateNoteOnUserProfile from 'utils/updateNoteOnUserProfile';
 
-const Container = styled.div`
+const Container = styled.div<{ bgColor: string }>`
   border-radius: 10px;
-  //background-color: ${({ theme }) => theme.colors.post.greenCyan};
+  background-color: ${({ bgColor }) => bgColor};
   padding: 24px;
   max-width: 264px;
   height: 240px;
@@ -130,7 +130,7 @@ const Note = ({
   };
 
   return (
-    <Container style={{ backgroundColor: bgColor }}>
+    <Container bgColor={bgColor}>
       <NoteContent
         autoComplete="off"
         defaultValue={content}

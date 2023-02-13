@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { DEFAULT_NOTES } from 'constants/index';
 import theme from 'styles/theme';
 
-const bgColors = [
+const possibleBgColors = [
   theme.colors.post.greenCyan,
   theme.colors.post.lightCyan,
   theme.colors.post.lightYellow,
@@ -32,7 +32,7 @@ const Container = styled.main`
 
 const ContentContainer = styled.section`
   width: 100%;
-  padding: 40px 112px 0 112px;
+  padding: 40px 112px 0 224px;
   background-color: #fdfdfd;
 `;
 
@@ -132,7 +132,7 @@ const Home: NextPage = () => {
               notes.map((note, idx) => (
                 <li key={note.uid}>
                   <Note
-                    bgColor={bgColors[idx % bgColors.length]}
+                    bgColor={possibleBgColors[idx % possibleBgColors.length]}
                     user={user}
                     content={note.content}
                     date={note.lastUpdated}
