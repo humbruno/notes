@@ -1,7 +1,11 @@
+import LoadingSpinner from 'components/LoadingSpinner';
+import { User } from 'firebase/auth';
 import TrashIcon from 'images/SVG/TrashIcon';
 import { rem } from 'polished';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import updateNoteOnUserProfile from 'utils/updateNoteOnUserProfile';
 
 const Container = styled.div`
   border-radius: 10px;
@@ -15,8 +19,11 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const NoteContent = styled.p`
+const NoteContent = styled.textarea`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
+  background-color: transparent;
+  border: none;
+  resize: none;
   font-size: ${rem(20)};
   line-height: ${rem(30)};
   color: ${({ theme }) => theme.colors.primary.midnight};
@@ -25,6 +32,10 @@ const NoteContent = styled.p`
 
   scrollbar-width: thin;
   scrollbar-color: white gray;
+
+  &:focus {
+    outline: none;
+  }
 
   ::-webkit-scrollbar {
     width: 10px;
@@ -73,20 +84,58 @@ const Date = styled.small`
 
 interface NoteProps {
   content: string;
+  user: User;
   date: string;
   uid: string;
   onDeleteNote: (id: string) => void;
 }
 
-const Note = ({ uid, content, date, onDeleteNote }: NoteProps) => {
+const Note = ({ uid, user, content, date, onDeleteNote }: NoteProps) => {
+  const [timer, setTimer] = useState<NodeJS.Timeout>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    clearTimeout(timer);
+
+    const newTimer = setTimeout(async () => {
+      try {
+        setIsSubmitting(true);
+
+        await updateNoteOnUserProfile({
+          user: user,
+          noteUid: uid,
+          newNoteContent: e.target.value,
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }, 1000);
+
+    setTimer(newTimer);
+  };
+
   return (
     <Container>
-      <NoteContent>{content}</NoteContent>
+      <NoteContent
+        autoComplete="off"
+        defaultValue={content}
+        onChange={handleInputChange}
+        rows={5}
+      />
       <Footnote>
         <Date>{date}</Date>
-        <DeleteNoteButton onClick={() => onDeleteNote(uid)} title="Delete Note">
-          <TrashIcon />
-        </DeleteNoteButton>
+        {isSubmitting ? (
+          <LoadingSpinner />
+        ) : (
+          <DeleteNoteButton
+            onClick={() => onDeleteNote(uid)}
+            title="Delete Note"
+          >
+            <TrashIcon />
+          </DeleteNoteButton>
+        )}
       </Footnote>
     </Container>
   );

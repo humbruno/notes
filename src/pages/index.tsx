@@ -11,6 +11,8 @@ import styled from 'styled-components';
 import Greeting from 'components/Greeting';
 import Note from 'components/Note';
 import deleteNoteFromUserProfile from 'utils/deleteNoteFromUserProfile';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 let anonLogin: string;
 
@@ -73,6 +75,19 @@ const Home: NextPage = () => {
     deleteNoteFromUserProfile({ user: user, noteUid: uid });
   };
 
+  useEffect(() => {
+    toast.error('🦄 Wow so easy!', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    });
+  }, []);
+
   if ((!user && !anonLogin) || loading) return <LoadingDots />;
 
   return (
@@ -86,6 +101,7 @@ const Home: NextPage = () => {
         <Sidebar onLogout={handleLogout} />
         <ContentContainer>
           <Greeting name={user?.displayName || JSON.parse(anonLogin)} />
+          <ToastContainer />
           <NotesContainer>
             {notes &&
               notes.map((note) => (
@@ -95,6 +111,7 @@ const Home: NextPage = () => {
                     date={note.lastUpdated}
                     uid={note.uid}
                     onDeleteNote={handleDeleteNote}
+                    user={user}
                   />
                 </li>
               ))}
