@@ -42,6 +42,7 @@ const NotesContainer = styled.ul`
   gap: 36px;
   flex-wrap: wrap;
   margin-top: 63px;
+  background-color: ${(props) => props.theme.colors.primary.midnight};
 `;
 
 const handleErrorNotification = (errorMessage: string) => {
