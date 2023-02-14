@@ -68,12 +68,19 @@ const Home: NextPage = () => {
   useEffect(() => {
     let isMounted = true;
 
-    try {
-      if (user && isMounted) {
+    if (user && isMounted) {
+      try {
         getUserProfileNotes(user).then((res) => setNotes(res));
+      } catch {
+        handleErrorNotification('Something went wrong.');
+      } finally {
+        return;
       }
-    } catch {
-      handleErrorNotification('Something went wrong.');
+    }
+
+    if (isMounted) {
+      const localStorageNotes = JSON.parse(localStorage.getItem('notes'));
+      setNotes(localStorageNotes);
     }
 
     return () => {
@@ -84,47 +91,67 @@ const Home: NextPage = () => {
   const handleLogout = useCallback(() => {
     if (user) return logout();
 
-    localStorage.removeItem('anonymousLogin');
+    localStorage.clear();
 
     router.push('/');
   }, [user]);
 
   const handleDeleteNote = useCallback(
     async (uid: string) => {
-      try {
-        setIsLoading(true);
+      if (user) {
+        try {
+          setIsLoading(true);
 
-        await deleteNoteFromUserProfile({ user: user, noteUid: uid });
+          await deleteNoteFromUserProfile({ user: user, noteUid: uid });
 
-        const res = await getUserProfileNotes(user);
-        setNotes(res);
+          const res = await getUserProfileNotes(user);
+          setNotes(res);
 
-        toast.success('Note deleted successfully.');
-      } catch {
-        handleErrorNotification('Something went wrong.');
-      } finally {
-        setIsLoading(false);
+          toast.success('Note deleted successfully.');
+        } catch {
+          handleErrorNotification('Something went wrong.');
+        } finally {
+          setIsLoading(false);
+          return;
+        }
       }
+
+      const localStorageNotes = JSON.parse(localStorage.getItem('notes'));
+      const newNotes = localStorageNotes.filter((note) => note.uid !== uid);
+      localStorage.setItem('notes', JSON.stringify(newNotes));
+
+      toast.success('Note deleted successfully.');
+      setNotes(newNotes);
     },
     [user],
   );
 
   const handleAddNewNote = async () => {
-    try {
-      setIsLoading(true);
+    if (user) {
+      try {
+        setIsLoading(true);
 
-      await addNewNoteToUserProfile({ user });
+        await addNewNoteToUserProfile({ user });
 
-      const newNotes = [DEFAULT_NOTES[0], ...notes];
+        const newNotes = [DEFAULT_NOTES[0], ...notes];
 
-      toast.success('New note created!');
+        toast.success('New note created!');
 
-      setNotes(newNotes);
-    } catch {
-      handleErrorNotification('Something went wrong.');
-    } finally {
-      setIsLoading(false);
+        setNotes(newNotes);
+      } catch {
+        handleErrorNotification('Something went wrong.');
+      } finally {
+        setIsLoading(false);
+        return;
+      }
     }
+
+    const localStorageNotes = JSON.parse(localStorage.getItem('notes'));
+    const newNotes = [DEFAULT_NOTES[0], ...localStorageNotes];
+    localStorage.setItem('notes', JSON.stringify(newNotes));
+
+    toast.success('New note created!');
+    setNotes(newNotes);
   };
 
   if ((!user && !anonLogin) || loading || isLoading) return <LoadingDots />;

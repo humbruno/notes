@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import AnonymousLoginButton from 'components/AnonymousLoginButton';
 import { useRouter } from 'next/router';
 import { breakpoints } from 'styles/theme';
+import { DEFAULT_NOTES } from 'constants/index';
 
 const Divider = styled.small`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
@@ -64,6 +65,8 @@ const AnonymousLogin = () => {
       'anonymousLogin',
       JSON.stringify(anonLoginRef.current.value),
     );
+
+    localStorage.setItem('notes', JSON.stringify(DEFAULT_NOTES));
 
     router.push('/');
   };

@@ -112,12 +112,24 @@ const Note = ({
       try {
         setIsSubmitting(true);
 
-        await updateNoteOnUserProfile({
-          user,
-          noteUid: uid,
-          newNoteContent: e.target.value,
-        });
+        if (user) {
+          await updateNoteOnUserProfile({
+            user,
+            noteUid: uid,
+            newNoteContent: e.target.value,
+          });
+          setLastUpdateDate(getCurrentDateFormat());
 
+          return;
+        }
+
+        const localStorageNotes = JSON.parse(localStorage.getItem('notes'));
+
+        const objIndex = localStorageNotes.findIndex((obj) => obj.uid == uid);
+        localStorageNotes[objIndex].content = e.target.value;
+        localStorageNotes[objIndex].lastUpdated = getCurrentDateFormat();
+
+        localStorage.setItem('notes', JSON.stringify(localStorageNotes));
         setLastUpdateDate(getCurrentDateFormat());
       } catch {
         handleErrorNotification('Something went wrong.');
