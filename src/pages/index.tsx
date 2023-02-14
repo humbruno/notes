@@ -117,7 +117,9 @@ const Home: NextPage = () => {
       }
 
       const localStorageNotes = JSON.parse(localStorage.getItem('notes'));
-      const newNotes = localStorageNotes.filter((note) => note.uid !== uid);
+      const newNotes = localStorageNotes.filter(
+        (note: Note) => note.uid !== uid,
+      );
       localStorage.setItem('notes', JSON.stringify(newNotes));
 
       toast.success('Note deleted successfully.');

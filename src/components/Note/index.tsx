@@ -125,10 +125,11 @@ const Note = ({
 
         const localStorageNotes = JSON.parse(localStorage.getItem('notes'));
 
-        const objIndex = localStorageNotes.findIndex((obj) => obj.uid == uid);
+        const objIndex = localStorageNotes.findIndex(
+          (obj: Note) => obj.uid === uid,
+        );
         localStorageNotes[objIndex].content = e.target.value;
         localStorageNotes[objIndex].lastUpdated = getCurrentDateFormat();
-
         localStorage.setItem('notes', JSON.stringify(localStorageNotes));
         setLastUpdateDate(getCurrentDateFormat());
       } catch {
