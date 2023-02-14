@@ -33,6 +33,7 @@ const Container = styled.main`
 
 const ContentContainer = styled.section`
   width: 100%;
+  min-height: 100vh;
   padding: 40px 112px 0 224px;
   background-color: #fdfdfd;
 `;
@@ -114,7 +115,7 @@ const Home: NextPage = () => {
 
       await addNewNoteToUserProfile({ user });
 
-      const newNotes = [...notes, DEFAULT_NOTES[0]];
+      const newNotes = [DEFAULT_NOTES[0], ...notes];
 
       toast.success('New note created!');
 

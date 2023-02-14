@@ -23,7 +23,7 @@ const addNewNoteToUserProfile = async ({ user }: RequestParams) => {
 
   docs.forEach((doc) => {
     firebaseUserId = doc.id;
-    newNotes.push(...doc.data().notes, DEFAULT_NOTES[0]);
+    newNotes.push(DEFAULT_NOTES[0], ...doc.data().notes);
   });
 
   const docRef = doc(db, 'users', firebaseUserId);
