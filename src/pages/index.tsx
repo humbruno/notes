@@ -15,6 +15,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { DEFAULT_NOTES } from 'constants/index';
 import theme from 'styles/theme';
+import addNewNoteToUserProfile from 'utils/addNewNoteToUserProfile';
 
 const possibleBgColors = [
   theme.colors.post.greenCyan,
@@ -42,7 +43,6 @@ const NotesContainer = styled.ul`
   gap: 36px;
   flex-wrap: wrap;
   margin-top: 63px;
-  background-color: ${(props) => props.theme.colors.primary.midnight};
 `;
 
 const handleErrorNotification = (errorMessage: string) => {
@@ -108,10 +108,22 @@ const Home: NextPage = () => {
     [user],
   );
 
-  const handleAddNewNote = () => {
-    const newNotes = [...notes, DEFAULT_NOTES[0]];
+  const handleAddNewNote = async () => {
+    try {
+      setIsLoading(true);
 
-    setNotes(newNotes);
+      await addNewNoteToUserProfile({ user });
+
+      const newNotes = [...notes, DEFAULT_NOTES[0]];
+
+      toast.success('New note created!');
+
+      setNotes(newNotes);
+    } catch {
+      handleErrorNotification('Something went wrong.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if ((!user && !anonLogin) || loading || isLoading) return <LoadingDots />;

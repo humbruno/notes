@@ -1,3 +1,4 @@
+import { DEFAULT_NOTES } from 'constants/index';
 import { User } from 'firebase/auth';
 import {
   doc,
@@ -11,10 +12,9 @@ import { db } from 'lib/firebase';
 
 interface RequestParams {
   user: User;
-  noteUid: string;
 }
 
-const deleteNoteFromUserProfile = async ({ user, noteUid }: RequestParams) => {
+const addNewNoteToUserProfile = async ({ user }: RequestParams) => {
   let newNotes: Note[] = [];
   let firebaseUserId: string;
 
@@ -23,9 +23,7 @@ const deleteNoteFromUserProfile = async ({ user, noteUid }: RequestParams) => {
 
   docs.forEach((doc) => {
     firebaseUserId = doc.id;
-    newNotes.push(
-      ...doc.data().notes.filter((note: Note) => note.uid !== noteUid),
-    );
+    newNotes.push(...doc.data().notes, DEFAULT_NOTES[0]);
   });
 
   const docRef = doc(db, 'users', firebaseUserId);
@@ -37,4 +35,4 @@ const deleteNoteFromUserProfile = async ({ user, noteUid }: RequestParams) => {
   updateDoc(docRef, data);
 };
 
-export default deleteNoteFromUserProfile;
+export default addNewNoteToUserProfile;
