@@ -16,6 +16,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { DEFAULT_NOTES } from 'constants/index';
 import theme from 'styles/theme';
 import addNewNoteToUserProfile from 'utils/addNewNoteToUserProfile';
+import MoonIcon from 'images/SVG/MoonIcon';
+import SunIcon from 'images/SVG/SunIcon';
 
 const possibleBgColors = [
   theme.colors.post.greenCyan,
@@ -31,11 +33,14 @@ const Container = styled.main`
   display: flex;
 `;
 
-const ContentContainer = styled.section`
+const ContentContainer = styled.section<{ darkTheme: boolean }>`
   width: 100%;
   min-height: 100vh;
   padding: 40px 112px 0 224px;
-  background-color: #fdfdfd;
+  background-color: ${({ darkTheme, theme }) =>
+    darkTheme ? theme.colors.grays.gray800 : '#fdfdfd'};
+
+  transition: all 150ms ease-in-out;
 `;
 
 const NotesContainer = styled.ul`
@@ -46,6 +51,25 @@ const NotesContainer = styled.ul`
   margin-top: 63px;
 `;
 
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ThemeToggleButton = styled.button`
+  background-color: transparent;
+  border: none;
+  padding: 0;
+
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+`;
+
 const handleErrorNotification = (errorMessage: string) => {
   toast.error(errorMessage);
 };
@@ -54,12 +78,17 @@ const Home: NextPage = () => {
   const [notes, setNotes] = useState<Note[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [theme, setTheme] = useState('light');
+  const isDarkTheme = theme === 'dark';
+
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
 
   if (typeof window !== 'undefined') {
     anonLogin = localStorage.getItem('anonymousLogin');
   }
+
+  const toggleTheme = () => setTheme(isDarkTheme ? 'light' : 'dark');
 
   useEffect(() => {
     if (!user && !anonLogin) router.push('/login');
@@ -166,15 +195,28 @@ const Home: NextPage = () => {
         title="NOTE.me"
       />
       <Container>
-        <Sidebar onAddNewNote={handleAddNewNote} onLogout={handleLogout} />
-        <ContentContainer>
-          <Greeting name={user?.displayName || JSON.parse(anonLogin)} />
+        <Sidebar
+          darkTheme={isDarkTheme}
+          onAddNewNote={handleAddNewNote}
+          onLogout={handleLogout}
+        />
+        <ContentContainer darkTheme={isDarkTheme}>
+          <HeaderWrapper>
+            <Greeting
+              darkTheme={isDarkTheme}
+              name={user?.displayName || JSON.parse(anonLogin)}
+            />
+            <ThemeToggleButton onClick={toggleTheme}>
+              {isDarkTheme ? <MoonIcon /> : <SunIcon />}
+            </ThemeToggleButton>
+          </HeaderWrapper>
           <ToastContainer />
           <NotesContainer>
             {notes &&
               notes.map((note, idx) => (
                 <li key={note.uid}>
                   <Note
+                    darkTheme={isDarkTheme}
                     bgColor={possibleBgColors[idx % possibleBgColors.length]}
                     user={user}
                     content={note.content}

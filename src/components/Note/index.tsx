@@ -7,31 +7,45 @@ import styled from 'styled-components';
 import getCurrentDateFormat from 'utils/getCurrentDateFormat';
 import updateNoteOnUserProfile from 'utils/updateNoteOnUserProfile';
 
-const Container = styled.div<{ bgColor: string }>`
+const Container = styled.div<{ bgColor: string; darkTheme: boolean }>`
   border-radius: 10px;
   background-color: ${({ bgColor }) => bgColor};
   padding: 24px;
   max-width: 264px;
   height: 240px;
-
+  color: ${({ theme, darkTheme }) =>
+    darkTheme ? '#fff' : theme.colors.primary.midnight};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  transition: all 150ms ease-in-out;
+
+  svg {
+    path,
+    circle {
+      stroke: ${({ theme, darkTheme }) =>
+        darkTheme ? '#fff' : theme.colors.primary.midnight};
+    }
+  }
 `;
 
-const NoteContent = styled.textarea`
+const NoteContent = styled.textarea<{ darkTheme: boolean }>`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   background-color: transparent;
   border: none;
   resize: none;
   font-size: ${rem(20)};
   line-height: ${rem(30)};
-  color: ${({ theme }) => theme.colors.primary.midnight};
+  color: ${({ theme, darkTheme }) =>
+    darkTheme ? '#fff' : theme.colors.primary.midnight};
   overflow-y: auto;
   margin-bottom: 12px;
 
   scrollbar-width: thin;
   scrollbar-color: white gray;
+
+  transition: all 150ms ease-in-out;
 
   &:focus {
     outline: none;
@@ -79,13 +93,13 @@ const Date = styled.small`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   font-size: ${rem(14)};
   line-height: ${rem(16)};
-  color: ${({ theme }) => theme.colors.primary.midnight};
 `;
 
 interface NoteProps {
   content: string;
   user: User;
   date: string;
+  darkTheme: boolean;
   uid: string;
   bgColor: string;
   handleDeleteNote: (id: string) => void;
@@ -97,6 +111,7 @@ const Note = ({
   user,
   content,
   date,
+  darkTheme,
   bgColor,
   handleDeleteNote,
   handleErrorNotification,
@@ -143,8 +158,9 @@ const Note = ({
   };
 
   return (
-    <Container bgColor={bgColor}>
+    <Container bgColor={bgColor} darkTheme={darkTheme}>
       <NoteContent
+        darkTheme={darkTheme}
         autoComplete="off"
         defaultValue={content}
         onChange={handleInputChange}

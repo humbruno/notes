@@ -40,7 +40,7 @@ const LoadingSpinner = () => {
         r="20"
         fill="none"
         stroke-width="4"
-        style={{ stroke: '#3C3D43' }}
+        stroke="#3C3D43"
       ></circle>
     </Spinner>
   );

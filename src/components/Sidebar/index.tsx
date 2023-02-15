@@ -2,12 +2,16 @@ import React from 'react';
 
 import Image from 'next/image';
 import logoSimpleDark from 'images/logo-simple-dark.png';
+import logoSimpleLight from 'images/logo-simple-light.png';
 import styled from 'styled-components';
 import PlusIcon from 'images/SVG/PlusIcon';
 import LogoutIcon from 'images/SVG/LogouIcon';
 
-const Container = styled.nav`
-  background-color: ${({ theme }) => theme.colors.primary.creamWhite};
+const Container = styled.nav<{ darkTheme: boolean }>`
+  background-color: ${({ theme, darkTheme }) =>
+    darkTheme
+      ? theme.colors.primary.midnight
+      : theme.colors.primary.creamWhite};
   min-height: 100vh;
   max-width: 120px;
 
@@ -21,6 +25,13 @@ const Container = styled.nav`
   z-index: 1;
 
   box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.05);
+  transition: all 150ms ease-in-out;
+
+  svg {
+    g {
+      stroke: ${({ theme, darkTheme }) => (darkTheme ? '#fff' : '#3C3D43')};
+    }
+  }
 `;
 
 const SidebarButton = styled.button`
@@ -42,14 +53,15 @@ const SidebarButton = styled.button`
 `;
 
 interface SidebarProps {
+  darkTheme: boolean;
   onLogout: () => void;
   onAddNewNote: () => void;
 }
 
-const Sidebar = ({ onLogout, onAddNewNote }: SidebarProps) => {
+const Sidebar = ({ darkTheme, onLogout, onAddNewNote }: SidebarProps) => {
   return (
-    <Container>
-      <Image src={logoSimpleDark} alt="" />
+    <Container darkTheme={darkTheme}>
+      <Image src={darkTheme ? logoSimpleLight : logoSimpleDark} alt="" />
       <SidebarButton title="New Note" onClick={onAddNewNote}>
         <PlusIcon />
       </SidebarButton>
