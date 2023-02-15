@@ -17,12 +17,12 @@ import {
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCSZS1qQsD7_TPCThQeze_UggGzlvJrqG0',
-  authDomain: 'notes-bafc8.firebaseapp.com',
-  projectId: 'notes-bafc8',
-  storageBucket: 'notes-bafc8.appspot.com',
-  messagingSenderId: '235460016028',
-  appId: '1:235460016028:web:44520db7a8c57e6cc37a59',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
