@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const FullPageContainer = styled.div`
+const FullPageContainer = styled.div<{ darkTheme: boolean }>`
   width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: ${({ darkTheme, theme }) =>
+    darkTheme ? theme.colors.primary.midnight : '#fdfdfd'};
 `;
 
-const DotsContainer = styled.div`
+const DotsContainer = styled.div<{ darkTheme: boolean }>`
   display: flex;
   justify-content: center;
 
@@ -25,7 +27,8 @@ const DotsContainer = styled.div`
     height: 16px;
     margin: 3px 6px;
     border-radius: 50%;
-    background-color: ${({ theme }) => theme.colors.semantic.green};
+    background-color: ${({ theme, darkTheme }) =>
+      darkTheme ? theme.colors.primary.rose : theme.colors.semantic.green};
     opacity: 1;
     animation: bouncing-loader 0.6s infinite alternate;
   }
@@ -39,10 +42,14 @@ const DotsContainer = styled.div`
   }
 `;
 
-const LoadingDots = () => {
+interface Props {
+  darkTheme?: boolean;
+}
+
+const LoadingDots = ({ darkTheme }: Props) => {
   return (
-    <FullPageContainer>
-      <DotsContainer>
+    <FullPageContainer darkTheme={darkTheme}>
+      <DotsContainer darkTheme={darkTheme}>
         <div />
         <div />
         <div />

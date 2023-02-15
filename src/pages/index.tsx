@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { auth, logout } from 'lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import LoadingDots from 'components/LoadingDots';
 import getUserProfileNotes from 'utils/getUserProfileNotes';
@@ -78,8 +78,8 @@ const Home: NextPage = () => {
   const [notes, setNotes] = useState<Note[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [theme, setTheme] = useState('light');
-  const isDarkTheme = theme === 'dark';
+  const [theme, setTheme] = useState<string>('light');
+  let isDarkTheme = theme === 'dark';
 
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
@@ -88,7 +88,21 @@ const Home: NextPage = () => {
     anonLogin = localStorage.getItem('anonymousLogin');
   }
 
-  const toggleTheme = () => setTheme(isDarkTheme ? 'light' : 'dark');
+  const toggleTheme = () => {
+    localStorage.setItem(
+      'theme',
+      JSON.stringify(isDarkTheme ? 'light' : 'dark'),
+    );
+    setTheme(isDarkTheme ? 'light' : 'dark');
+  };
+
+  useEffect(() => {
+    const preferredTheme = JSON.parse(localStorage.getItem('theme'));
+
+    if (preferredTheme) {
+      setTheme(preferredTheme);
+    }
+  }, []);
 
   useEffect(() => {
     if (!user && !anonLogin) router.push('/login');
@@ -185,7 +199,8 @@ const Home: NextPage = () => {
     setNotes(newNotes);
   };
 
-  if ((!user && !anonLogin) || loading || isLoading) return <LoadingDots />;
+  if ((!user && !anonLogin) || loading || isLoading)
+    return <LoadingDots darkTheme={isDarkTheme} />;
 
   return (
     <>
