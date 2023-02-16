@@ -1,6 +1,7 @@
 import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';
+import { breakpoints } from 'styles/theme';
 
 const Container = styled.div``;
 
@@ -10,6 +11,11 @@ const Title = styled.h2<{ darkTheme: boolean }>`
   line-height: ${rem(36)};
   color: ${({ theme, darkTheme }) =>
     darkTheme ? '#fff' : theme.colors.grays.gray900};
+
+  @media (max-width: ${breakpoints.laptop}) {
+    font-size: ${rem(24)};
+    line-height: ${rem(30)};
+  }
 `;
 
 const Username = styled.strong`
@@ -24,6 +30,11 @@ const Text = styled.p<{ darkTheme: boolean }>`
     darkTheme ? '#fff' : theme.colors.grays.gray600};
 
   margin-top: 10px;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    font-size: ${rem(16)};
+    line-height: ${rem(20)};
+  }
 `;
 
 interface GreetingProps {
