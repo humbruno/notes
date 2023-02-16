@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <img src=".github/preview.jpg" width="800px" />
+  <img src=".github/preview.png" width="800px" />
 </p>
 
 ## 💻 Project
