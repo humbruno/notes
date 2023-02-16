@@ -1,18 +1,17 @@
+import { screenBreakpoints } from 'constants/screenBreakPoints';
 import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';
-import { breakpoints } from 'styles/theme';
 
 const Container = styled.div``;
 
-const Title = styled.h2<{ darkTheme: boolean }>`
+const Title = styled.h2`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
   font-size: ${rem(32)};
   line-height: ${rem(36)};
-  color: ${({ theme, darkTheme }) =>
-    darkTheme ? '#fff' : theme.colors.grays.gray900};
+  color: ${({ theme }) => theme.textPrimary};
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     font-size: ${rem(24)};
     line-height: ${rem(30)};
   }
@@ -22,16 +21,15 @@ const Username = styled.strong`
   font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
-const Text = styled.p<{ darkTheme: boolean }>`
+const Text = styled.p`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
   font-size: ${rem(20)};
   line-height: ${rem(22)};
-  color: ${({ theme, darkTheme }) =>
-    darkTheme ? '#fff' : theme.colors.grays.gray600};
+  color: ${({ theme }) => theme.textSecondary};
 
   margin-top: 10px;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     font-size: ${rem(16)};
     line-height: ${rem(20)};
   }
@@ -39,16 +37,15 @@ const Text = styled.p<{ darkTheme: boolean }>`
 
 interface GreetingProps {
   name: string;
-  darkTheme: boolean;
 }
 
-const Greeting = ({ name, darkTheme }: GreetingProps) => {
+const Greeting = ({ name }: GreetingProps) => {
   return (
     <Container>
-      <Title darkTheme={darkTheme}>
+      <Title>
         Hello, <Username>{name}!</Username> &#x1F44B;
       </Title>
-      <Text darkTheme={darkTheme}>All your notes are here, in one place!</Text>
+      <Text>All your notes are here, in one place!</Text>
     </Container>
   );
 };
