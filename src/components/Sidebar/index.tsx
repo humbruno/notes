@@ -6,6 +6,7 @@ import logoSimpleLight from 'images/logo-simple-light.png';
 import styled from 'styled-components';
 import PlusIcon from 'images/SVG/PlusIcon';
 import LogoutIcon from 'images/SVG/LogouIcon';
+import { breakpoints } from 'styles/theme';
 
 const Container = styled.nav<{ darkTheme: boolean }>`
   background-color: ${({ theme, darkTheme }) =>
@@ -31,6 +32,16 @@ const Container = styled.nav<{ darkTheme: boolean }>`
     g {
       stroke: ${({ theme, darkTheme }) => (darkTheme ? '#fff' : '#3C3D43')};
     }
+  }
+
+  @media (max-width: ${breakpoints.laptop}) {
+    position: fixed;
+    width: 100%;
+    max-width: 100%;
+    min-height: 1px;
+    padding: 12px 24px;
+
+    flex-direction: row;
   }
 `;
 

@@ -4,6 +4,7 @@ import TrashIcon from 'images/SVG/TrashIcon';
 import { rem } from 'polished';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { breakpoints } from 'styles/theme';
 import getCurrentDateFormat from 'utils/getCurrentDateFormat';
 import updateNoteOnUserProfile from 'utils/updateNoteOnUserProfile';
 
@@ -28,6 +29,11 @@ const Container = styled.div<{ bgColor: string; darkTheme: boolean }>`
         darkTheme ? '#fff' : theme.colors.primary.midnight};
     }
   }
+
+  @media (max-width: ${breakpoints.laptop}) {
+    padding: 16px;
+    max-width: 100%;
+  }
 `;
 
 const NoteContent = styled.textarea<{ darkTheme: boolean }>`
@@ -46,6 +52,11 @@ const NoteContent = styled.textarea<{ darkTheme: boolean }>`
   scrollbar-color: white gray;
 
   transition: all 150ms ease-in-out;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    font-size: ${rem(18)};
+    line-height: ${rem(20)};
+  }
 
   &:focus {
     outline: none;
@@ -93,6 +104,10 @@ const Date = styled.small`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   font-size: ${rem(14)};
   line-height: ${rem(16)};
+
+  @media (max-width: ${breakpoints.laptop}) {
+    font-size: ${rem(12)};
+  }
 `;
 
 interface NoteProps {

@@ -14,7 +14,7 @@ import deleteNoteFromUserProfile from 'utils/deleteNoteFromUserProfile';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { DEFAULT_NOTES } from 'constants/index';
-import theme from 'styles/theme';
+import theme, { breakpoints } from 'styles/theme';
 import addNewNoteToUserProfile from 'utils/addNewNoteToUserProfile';
 import MoonIcon from 'images/SVG/MoonIcon';
 import SunIcon from 'images/SVG/SunIcon';
@@ -31,6 +31,10 @@ let anonLogin: string;
 
 const Container = styled.main`
   display: flex;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    flex-direction: column;
+  }
 `;
 
 const ContentContainer = styled.section<{ darkTheme: boolean }>`
@@ -41,6 +45,10 @@ const ContentContainer = styled.section<{ darkTheme: boolean }>`
     darkTheme ? theme.colors.grays.gray800 : '#fdfdfd'};
 
   transition: all 150ms ease-in-out;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    padding: 100px 24px 24px;
+  }
 `;
 
 const NotesContainer = styled.ul`
@@ -49,6 +57,12 @@ const NotesContainer = styled.ul`
   gap: 36px;
   flex-wrap: wrap;
   margin-top: 63px;
+
+  @media (max-width: ${breakpoints.laptop}) {
+    margin-top: 40px;
+    justify-content: center;
+    gap: 18px;
+  }
 `;
 
 const HeaderWrapper = styled.div`
