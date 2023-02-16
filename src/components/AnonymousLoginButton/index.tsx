@@ -1,4 +1,4 @@
-import { screenBreakpoints } from 'constants/screenBreakPoints';
+import { screenBreakpoints } from 'constants/screenBreakpoints';
 import LoginIcon from 'images/SVG/LoginIcon';
 import { rem } from 'polished';
 import React from 'react';

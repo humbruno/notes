@@ -1,4 +1,4 @@
-import { screenBreakpoints } from 'constants/screenBreakPoints';
+import { screenBreakpoints } from 'constants/screenBreakpoints';
 import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';

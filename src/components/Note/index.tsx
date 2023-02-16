@@ -1,5 +1,5 @@
 import LoadingSpinner from 'components/LoadingSpinner';
-import { screenBreakpoints } from 'constants/screenBreakPoints';
+import { screenBreakpoints } from 'constants/screenBreakpoints';
 import { User } from 'firebase/auth';
 import TrashIcon from 'images/SVG/TrashIcon';
 import { rem } from 'polished';
