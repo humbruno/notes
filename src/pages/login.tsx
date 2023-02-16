@@ -12,7 +12,7 @@ import { auth } from 'lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 import LoadingDots from 'components/LoadingDots';
-import { screenBreakpoints } from 'constants/screenBreakPoints';
+import { screenBreakpoints } from 'constants/screenBreakpoints';
 
 const Main = styled.main`
   min-height: 100vh;

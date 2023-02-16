@@ -24,7 +24,7 @@ import theme from 'styles/theme/shared';
 import addNewNoteToUserProfile from 'utils/addNewNoteToUserProfile';
 import MoonIcon from 'images/SVG/MoonIcon';
 import SunIcon from 'images/SVG/SunIcon';
-import { screenBreakpoints } from 'constants/screenBreakPoints';
+import { screenBreakpoints } from 'constants/screenBreakpoints';
 
 const possibleBgColors = [
   theme.colors.post.greenCyan,

@@ -3,7 +3,7 @@ import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';
 import { signInWithGoogle } from 'lib/firebase';
-import { screenBreakpoints } from 'constants/screenBreakPoints';
+import { screenBreakpoints } from 'constants/screenBreakpoints';
 
 const StyledButton = styled.button`
   background-color: ${({ theme }) => theme.colors.semantic.red};

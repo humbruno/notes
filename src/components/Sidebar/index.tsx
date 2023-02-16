@@ -6,7 +6,7 @@ import logoSimpleLight from 'images/logo-simple-light.png';
 import styled, { ThemeContext } from 'styled-components';
 import PlusIcon from 'images/SVG/PlusIcon';
 import LogoutIcon from 'images/SVG/LogouIcon';
-import { screenBreakpoints } from 'constants/screenBreakPoints';
+import { screenBreakpoints } from 'constants/screenBreakpoints';
 
 const Container = styled.nav`
   background-color: ${({ theme }) => theme.sidebarBackground};

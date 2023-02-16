@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import AnonymousLoginButton from 'components/AnonymousLoginButton';
 import { useRouter } from 'next/router';
 import { DEFAULT_NOTES } from 'constants/index';
-import { screenBreakpoints } from 'constants/screenBreakPoints';
+import { screenBreakpoints } from 'constants/screenBreakpoints';
 
 const Divider = styled.small`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
