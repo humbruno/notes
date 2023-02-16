@@ -3,7 +3,7 @@ import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';
 import { signInWithGoogle } from 'lib/firebase';
-import { breakpoints } from 'styles/theme';
+import { screenBreakpoints } from 'constants/screenBreakPoints';
 
 const StyledButton = styled.button`
   background-color: ${({ theme }) => theme.colors.semantic.red};
@@ -29,7 +29,7 @@ const StyledButton = styled.button`
     filter: brightness(1.1);
   }
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     width: 100%;
     padding: 16px;
 

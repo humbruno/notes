@@ -1,23 +1,30 @@
 import type { NextPage } from 'next';
 import { auth, logout } from 'lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { useRouter } from 'next/router';
 import LoadingDots from 'components/LoadingDots';
 import getUserProfileNotes from 'utils/getUserProfileNotes';
 import SEO from 'components/SEO';
 import Sidebar from 'components/Sidebar';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import Greeting from 'components/Greeting';
 import Note from 'components/Note';
 import deleteNoteFromUserProfile from 'utils/deleteNoteFromUserProfile';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { DEFAULT_NOTES } from 'constants/index';
-import theme, { breakpoints } from 'styles/theme';
+import theme from 'styles/theme/shared';
 import addNewNoteToUserProfile from 'utils/addNewNoteToUserProfile';
 import MoonIcon from 'images/SVG/MoonIcon';
 import SunIcon from 'images/SVG/SunIcon';
+import { screenBreakpoints } from 'constants/screenBreakPoints';
 
 const possibleBgColors = [
   theme.colors.post.greenCyan,
@@ -32,21 +39,20 @@ let anonLogin: string;
 const Container = styled.main`
   display: flex;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     flex-direction: column;
   }
 `;
 
-const ContentContainer = styled.section<{ darkTheme: boolean }>`
+const ContentContainer = styled.section`
   width: 100%;
   min-height: 100vh;
   padding: 40px 112px 0 224px;
-  background-color: ${({ darkTheme, theme }) =>
-    darkTheme ? theme.colors.grays.gray800 : '#fdfdfd'};
+  background-color: ${({ theme }) => theme.mainBackground};
 
   transition: all 150ms ease-in-out;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     padding: 100px 24px 24px;
   }
 `;
@@ -58,7 +64,7 @@ const NotesContainer = styled.ul`
   flex-wrap: wrap;
   margin-top: 63px;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     margin-top: 40px;
     justify-content: center;
     gap: 18px;
@@ -88,12 +94,15 @@ const handleErrorNotification = (errorMessage: string) => {
   toast.error(errorMessage);
 };
 
-const Home: NextPage = () => {
+interface Props {
+  toggleTheme: () => void;
+}
+
+const Home: NextPage = ({ toggleTheme }: Props) => {
   const [notes, setNotes] = useState<Note[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [theme, setTheme] = useState<string>('light');
-  let isDarkTheme = theme === 'dark';
+  const { title } = useContext(ThemeContext);
 
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
@@ -102,19 +111,12 @@ const Home: NextPage = () => {
     anonLogin = localStorage.getItem('anonymousLogin');
   }
 
-  const toggleTheme = () => {
-    localStorage.setItem(
-      'theme',
-      JSON.stringify(isDarkTheme ? 'light' : 'dark'),
-    );
-    setTheme(isDarkTheme ? 'light' : 'dark');
-  };
-
   useEffect(() => {
     const preferredTheme = JSON.parse(localStorage.getItem('theme'));
 
-    if (preferredTheme) {
-      setTheme(preferredTheme);
+    if (preferredTheme === 'dark') {
+      //because the default theme set in _app.tsx is light
+      toggleTheme();
     }
   }, []);
 
@@ -214,7 +216,7 @@ const Home: NextPage = () => {
   };
 
   if ((!user && !anonLogin) || loading || isLoading)
-    return <LoadingDots darkTheme={isDarkTheme} />;
+    return <LoadingDots darkTheme={title === 'dark'} />;
 
   return (
     <>
@@ -224,19 +226,12 @@ const Home: NextPage = () => {
         title="NOTE.me"
       />
       <Container>
-        <Sidebar
-          darkTheme={isDarkTheme}
-          onAddNewNote={handleAddNewNote}
-          onLogout={handleLogout}
-        />
-        <ContentContainer darkTheme={isDarkTheme}>
+        <Sidebar onAddNewNote={handleAddNewNote} onLogout={handleLogout} />
+        <ContentContainer>
           <HeaderWrapper>
-            <Greeting
-              darkTheme={isDarkTheme}
-              name={user?.displayName || JSON.parse(anonLogin)}
-            />
+            <Greeting name={user?.displayName || JSON.parse(anonLogin)} />
             <ThemeToggleButton onClick={toggleTheme}>
-              {isDarkTheme ? <MoonIcon /> : <SunIcon />}
+              {title === 'dark' ? <MoonIcon /> : <SunIcon />}
             </ThemeToggleButton>
           </HeaderWrapper>
           <ToastContainer />
@@ -245,7 +240,6 @@ const Home: NextPage = () => {
               notes.map((note, idx) => (
                 <li key={note.uid}>
                   <Note
-                    darkTheme={isDarkTheme}
                     bgColor={possibleBgColors[idx % possibleBgColors.length]}
                     user={user}
                     content={note.content}

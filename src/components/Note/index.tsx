@@ -1,21 +1,20 @@
 import LoadingSpinner from 'components/LoadingSpinner';
+import { screenBreakpoints } from 'constants/screenBreakPoints';
 import { User } from 'firebase/auth';
 import TrashIcon from 'images/SVG/TrashIcon';
 import { rem } from 'polished';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { breakpoints } from 'styles/theme';
 import getCurrentDateFormat from 'utils/getCurrentDateFormat';
 import updateNoteOnUserProfile from 'utils/updateNoteOnUserProfile';
 
-const Container = styled.div<{ bgColor: string; darkTheme: boolean }>`
+const Container = styled.div<{ bgColor: string }>`
   border-radius: 10px;
   background-color: ${({ bgColor }) => bgColor};
   padding: 24px;
   max-width: 264px;
   height: 240px;
-  color: ${({ theme, darkTheme }) =>
-    darkTheme ? '#fff' : theme.colors.primary.midnight};
+  color: ${({ theme }) => theme.textSecondary};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -25,26 +24,24 @@ const Container = styled.div<{ bgColor: string; darkTheme: boolean }>`
   svg {
     path,
     circle {
-      stroke: ${({ theme, darkTheme }) =>
-        darkTheme ? '#fff' : theme.colors.primary.midnight};
+      stroke: ${({ theme }) => theme.sidebarSvgFill};
     }
   }
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     padding: 16px;
     max-width: 100%;
   }
 `;
 
-const NoteContent = styled.textarea<{ darkTheme: boolean }>`
+const NoteContent = styled.textarea`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   background-color: transparent;
   border: none;
   resize: none;
   font-size: ${rem(20)};
   line-height: ${rem(30)};
-  color: ${({ theme, darkTheme }) =>
-    darkTheme ? '#fff' : theme.colors.primary.midnight};
+  color: ${({ theme }) => theme.textSecondary};
   overflow-y: auto;
   margin-bottom: 12px;
 
@@ -53,7 +50,7 @@ const NoteContent = styled.textarea<{ darkTheme: boolean }>`
 
   transition: all 150ms ease-in-out;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     font-size: ${rem(18)};
     line-height: ${rem(20)};
   }
@@ -105,7 +102,7 @@ const Date = styled.small`
   font-size: ${rem(14)};
   line-height: ${rem(16)};
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     font-size: ${rem(12)};
   }
 `;
@@ -114,7 +111,6 @@ interface NoteProps {
   content: string;
   user: User;
   date: string;
-  darkTheme: boolean;
   uid: string;
   bgColor: string;
   handleDeleteNote: (id: string) => void;
@@ -126,7 +122,6 @@ const Note = ({
   user,
   content,
   date,
-  darkTheme,
   bgColor,
   handleDeleteNote,
   handleErrorNotification,
@@ -173,9 +168,8 @@ const Note = ({
   };
 
   return (
-    <Container bgColor={bgColor} darkTheme={darkTheme}>
+    <Container bgColor={bgColor}>
       <NoteContent
-        darkTheme={darkTheme}
         autoComplete="off"
         defaultValue={content}
         onChange={handleInputChange}

@@ -3,8 +3,8 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import AnonymousLoginButton from 'components/AnonymousLoginButton';
 import { useRouter } from 'next/router';
-import { breakpoints } from 'styles/theme';
 import { DEFAULT_NOTES } from 'constants/index';
+import { screenBreakpoints } from 'constants/screenBreakPoints';
 
 const Divider = styled.small`
   font-weight: ${({ theme }) => theme.fontWeights.regular};
@@ -15,7 +15,7 @@ const Divider = styled.small`
   text-align: center;
   margin-top: 46px;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     margin-top: 20px;
   }
 `;
@@ -26,7 +26,7 @@ const LoginForm = styled.form`
   margin-top: 35px;
   gap: 30px;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     margin-top: 20px;
     width: 100%;
   }
@@ -46,7 +46,7 @@ const NameInput = styled.input`
     border: 1px solid ${({ theme }) => theme.colors.semantic.green};
   }
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     font-size: ${rem(14)};
   }
 `;

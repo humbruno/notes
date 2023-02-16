@@ -1,8 +1,8 @@
+import { screenBreakpoints } from 'constants/screenBreakPoints';
 import LoginIcon from 'images/SVG/LoginIcon';
 import { rem } from 'polished';
 import React from 'react';
 import styled from 'styled-components';
-import { breakpoints } from 'styles/theme';
 
 const StyledButton = styled.button`
   background-color: ${({ theme }) => theme.colors.semantic.green};
@@ -28,7 +28,7 @@ const StyledButton = styled.button`
     filter: brightness(1.05);
   }
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     width: 100%;
     padding: 16px;
     font-size: ${rem(14)};

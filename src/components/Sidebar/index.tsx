@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Image from 'next/image';
 import logoSimpleDark from 'images/logo-simple-dark.png';
 import logoSimpleLight from 'images/logo-simple-light.png';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import PlusIcon from 'images/SVG/PlusIcon';
 import LogoutIcon from 'images/SVG/LogouIcon';
-import { breakpoints } from 'styles/theme';
+import { screenBreakpoints } from 'constants/screenBreakPoints';
 
-const Container = styled.nav<{ darkTheme: boolean }>`
-  background-color: ${({ theme, darkTheme }) =>
-    darkTheme
-      ? theme.colors.primary.midnight
-      : theme.colors.primary.creamWhite};
+const Container = styled.nav`
+  background-color: ${({ theme }) => theme.sidebarBackground};
   min-height: 100vh;
   max-width: 120px;
 
@@ -30,11 +27,11 @@ const Container = styled.nav<{ darkTheme: boolean }>`
 
   svg {
     g {
-      stroke: ${({ theme, darkTheme }) => (darkTheme ? '#fff' : '#3C3D43')};
+      stroke: ${({ theme }) => theme.sidebarSvgFill};
     }
   }
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     position: fixed;
     width: 100%;
     max-width: 100%;
@@ -64,15 +61,16 @@ const SidebarButton = styled.button`
 `;
 
 interface SidebarProps {
-  darkTheme: boolean;
   onLogout: () => void;
   onAddNewNote: () => void;
 }
 
-const Sidebar = ({ darkTheme, onLogout, onAddNewNote }: SidebarProps) => {
+const Sidebar = ({ onLogout, onAddNewNote }: SidebarProps) => {
+  const { title } = useContext(ThemeContext);
+
   return (
-    <Container darkTheme={darkTheme}>
-      <Image src={darkTheme ? logoSimpleLight : logoSimpleDark} alt="" />
+    <Container>
+      <Image src={title === 'dark' ? logoSimpleLight : logoSimpleDark} alt="" />
       <SidebarButton title="New Note" onClick={onAddNewNote}>
         <PlusIcon />
       </SidebarButton>

@@ -1,4 +1,4 @@
-const theme = {
+const shared = {
   colors: {
     primary: {
       rose: '#FDBAA3',
@@ -32,10 +32,4 @@ const theme = {
   },
 };
 
-export const breakpoints = {
-  tablet: '768px',
-  laptop: '1024px',
-  desktop: '1280px',
-};
-
-export default theme;
+export default shared;

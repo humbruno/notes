@@ -12,13 +12,13 @@ import { auth } from 'lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 import LoadingDots from 'components/LoadingDots';
-import { breakpoints } from 'styles/theme';
+import { screenBreakpoints } from 'constants/screenBreakPoints';
 
 const Main = styled.main`
   min-height: 100vh;
   display: flex;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     flex-direction: column;
     background-color: ${({ theme }) => theme.colors.primary.creamWhite};
     padding: 0 24px;
@@ -36,7 +36,7 @@ const Description = styled.section`
 
   padding: 140px 140px 120px;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     width: 100%;
     background-color: ${({ theme }) => theme.colors.primary.creamWhite};
     padding: 0;
@@ -47,7 +47,7 @@ const Description = styled.section`
   img {
     display: block;
 
-    @media (max-width: ${breakpoints.laptop}) {
+    @media (max-width: ${screenBreakpoints.laptop}) {
       display: none;
     }
   }
@@ -63,7 +63,7 @@ const Heading = styled.h2`
   margin-bottom: 20px;
   width: 100%;
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     margin-top: 0;
 
     font-size: ${rem(24)};
@@ -77,7 +77,7 @@ const Text = styled.p`
   line-height: ${rem(32)};
   color: ${({ theme }) => theme.colors.grays.gray400};
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     font-size: ${rem(16)};
     line-height: ${rem(20)};
   }
@@ -97,12 +97,12 @@ const LoginForm = styled.section`
     user-select: none;
     margin-bottom: 46px;
 
-    @media (max-width: ${breakpoints.laptop}) {
+    @media (max-width: ${screenBreakpoints.laptop}) {
       margin-bottom: 20px;
     }
   }
 
-  @media (max-width: ${breakpoints.laptop}) {
+  @media (max-width: ${screenBreakpoints.laptop}) {
     width: 100%;
   }
 `;
